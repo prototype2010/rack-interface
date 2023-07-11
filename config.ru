@@ -1,7 +1,6 @@
 require_relative 'initializer'
 
 use Rack::Reloader, 0
-use RouteCheck
-use TimeParamsValidator
+use Rack::ContentType, 'text/plain'
 
-run App.new
+run Rack::URLMap.new(ROUTES)

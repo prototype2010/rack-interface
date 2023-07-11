@@ -1,8 +1,5 @@
 require_relative 'initializer'
 
 ROUTES = {
-  '/time': {
-    controller: TimeController,
-    methods: [:get]
-  }
+  '/time' => TimeController.new
 }.freeze

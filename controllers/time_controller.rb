@@ -1,22 +1,23 @@
 class TimeController
-  def initialize(env)
+  def call(env)
     @request = Rack::Request.new(env)
+
+    return no_method_error unless respond_to?(method_name)
+
+    send(method_name)
   end
 
   def get
-    Rack::Response.new(format_time, 200, {'Content-Type': 'text/plain' }).finish
+    TimeService.new(@request).call
   end
 
   private
 
-  def format_time
-    time = Time.new
-    format_parts
-      .map { |part| time.public_send(part) }
-      .join('-')
+  def no_method_error
+    Rack::Response.new("No method #{method_name}", 400).finish
   end
 
-  def format_parts
-    @request.params['format'].split(',').map(&:to_sym)
+  def method_name
+    @request.env['REQUEST_METHOD'].downcase
   end
 end
