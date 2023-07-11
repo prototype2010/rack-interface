@@ -4,7 +4,7 @@ class TimeController
   end
 
   def get
-    Rack::Response.new(format_time, 200).finish
+    Rack::Response.new(format_time, 200, {'Content-Type': 'text/plain' }).finish
   end
 
   private
