@@ -8,7 +8,14 @@ class TimeController
   end
 
   def get
-    TimeService.new(@request).call
+    format_validator = TimeFormatValidator.new(@request.params['format'])
+
+    if format_validator.valid?
+      formatted_time = TimeService.new.call(@request.params['format'])
+      Rack::Response.new(formatted_time, 200).finish
+    else
+      Rack::Response.new(format_validator.validation_error, 400).finish
+    end
   end
 
   private
